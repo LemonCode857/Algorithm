@@ -3,6 +3,7 @@ package huawei.onestar;
 import java.util.Scanner;
 
 /**
+ * 【字符串压缩解压】
  *     有一种简易压缩算法：针对全部为小写英文字母组成的字符串，
  *     将其中连续超过两个相同字母的部分压缩为连续个数加该字母
  *     其他部分保持原样不变.
@@ -55,26 +56,49 @@ public class Star62 {
         String str = sc.nextLine();
         sc.close();
 
-        if (str.replaceAll("[a-z]", "").replaceAll("[0-9]","").length() > 0){
+        if (str.replaceAll("[a-z]|[0-9]", "").length() != 0){
             System.out.println("!error");
+            return;
         }
 
-        char[] ca = str.toCharArray();
+        char[] charArray = str.toCharArray();
+        StringBuilder outSb = new StringBuilder();
 
-        StringBuilder sb = new StringBuilder(str);
-
-
-        for (int i = 0; i < ca.length; i++) {
-            char tem = ca[i];
-            int count = 0;
-            int len = ca.length;
-            if (Character.isDigit(tem)) {
-                    count++;
+        for (int i = 0; i < charArray.length; i++){
+            char curChar = charArray[i];
+            // a is digit
+            if (Character.isDigit(curChar)){
+                char nextChar = charArray[i + 1];
+                // b is digit  Only two digits are allowed
+                if (Character.isDigit(nextChar)){
+                    int num = Integer.parseInt(str.substring(i, i + 2));
+                    while (num > 0){
+                        outSb.append(charArray[i + 2]);
+                        num--;
+                    }
+                    // pass 2
+                    i += 2;
+                }else{
+                    // b is char then  require a>2
+                    int num = Integer.parseInt(str.substring(i, i + 1));
+                    if (num <= 2){
+                        System.out.println("!error");
+                        return;
+                    }else{
+                        while (num > 0){
+                            outSb.append(charArray[i + 1]);
+                            num--;
+                        }
+                        // pass 1
+                        i += 1;
+                    }
+                }
             }else{
-                return;
-            }
-
+                // a is char
+                outSb.append(charArray[i]);
             }
         }
+        System.out.println(outSb.toString());
     }
+
 }
