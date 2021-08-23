@@ -1,7 +1,5 @@
 package huawei.onestar;
 
-import sun.plugin2.gluegen.runtime.StructAccessor;
-
 import java.util.*;
 
 /**
