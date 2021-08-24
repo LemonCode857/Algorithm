@@ -55,57 +55,65 @@ import java.util.stream.Collectors;
  */
 public class Star59 {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int num = Integer.parseInt(sc.nextLine());
-        ArrayList<List<String>> inpAl = new ArrayList<>();
-        for (int i = 0; i < num; i++){
-            String[] kq = sc.nextLine().split(" ");
-            List<String> kqList = Arrays.stream(kq).collect(Collectors.toList());
-            inpAl.add(kqList);
+        Scanner in = new Scanner(System.in);
+        int n = Integer.parseInt(in.nextLine());
+        ArrayList<List<String>> days = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            String[] split = in.nextLine().split(" ");
+            List<String> list = Arrays.stream(split)
+                    .collect(Collectors.toList());
+            days.add(list);
         }
-        sc.close();
+        in.close();
 
         StringBuilder sb = new StringBuilder();
 
-        for (List<String> ls : inpAl){
-            /** 1.缺勤不超过1次 */
-            if (ls.contains("absent")){
+        for (List<String> day : days) {
+            //1.缺勤不超过1次
+            if (day.contains("absent")) {
                 sb.append("false").append(" ");
                 continue;
             }
-            /** 2.没有连续的迟到late/早退leaveearly*/
-            boolean hasFalg = true;
-            for (int i = 0; i < inpAl.size() - 1; i++){
-                String strA = ls.get(i);
-                String strB = ls.get(i+1);
-                if (("late".equals(strA) && "leaveearly".equals(strB)) || ("late".equals(strB) && "leaveearly".equals(strA)){
-                    hasFalg = false;
+
+            //2.没有连续的迟到/早退
+            boolean flag = true;
+            for (int i = 0; i < day.size() - 1; i++) {
+                String cur = day.get(i);
+                String next = day.get(i + 1);
+                if (("late".equals(cur) ||
+                        "leaveearly".equals(cur)) &&
+                        ("late".equals(next) ||
+                                "leaveearly".equals(next))) {
+                    flag = false;
                     break;
                 }
             }
-            if (!hasFalg){
-                sb.append(hasFalg).append(" ");
+            if (!flag) {
+                sb.append(flag).append(" ");
                 continue;
             }
 
-            /** 3.任意连续7次考勤 缺勤/迟到/早退 不超过3次*/
-            int qczCount = 0;
-            int lianCount = 0;
-            for (int i = 0; i < inpAl.size(); i++){
-                if (!"present".equals(inpAl.get(i))){
-                    qczCount++;
-                }
-                lianCount += 1;
+            //3.任意连续7次考勤 缺勤/迟到/早退 不超过3次
+            int[] ints = new int[day.size()];
+            for (int i = 0; i < day.size(); i++) {
+                ints[i] = "present".equals(day.get(i)) ? 0 : 1;
             }
-            if ((lianCount <= 7) && (qczCount >= 3)){
+            if (ints.length <= 7 && Arrays.stream(ints).sum() >= 3) {
                 sb.append("false").append(" ");
-            }else{
-                hasFalg = true;
-                for(int i = 0; i < lianCount -1);
+            } else {
+                flag = true;
+                for (int i = 0; i < ints.length - 7; i++) {
+                    int[] subArr = Arrays.copyOfRange(ints, i, i + 7);
+                    if (Arrays.stream(subArr).sum() >= 3) {
+                        flag = false;
+                        break;
+                    }
+                }
+                sb.append(flag).append(" ");
             }
         }
 
-
+        System.out.println(sb.substring(0, sb.length() - 1));
 
     }
 }
