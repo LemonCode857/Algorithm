@@ -1,5 +1,9 @@
 package huawei.onestar;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+
 /**
  * 【公司员工出勤】
  *     公司用一个字符串来标识员工的出勤信息
@@ -50,4 +54,58 @@ package huawei.onestar;
  * @author 78698
  */
 public class Star59 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int num = Integer.parseInt(sc.nextLine());
+        ArrayList<List<String>> inpAl = new ArrayList<>();
+        for (int i = 0; i < num; i++){
+            String[] kq = sc.nextLine().split(" ");
+            List<String> kqList = Arrays.stream(kq).collect(Collectors.toList());
+            inpAl.add(kqList);
+        }
+        sc.close();
+
+        StringBuilder sb = new StringBuilder();
+
+        for (List<String> ls : inpAl){
+            /** 1.缺勤不超过1次 */
+            if (ls.contains("absent")){
+                sb.append("false").append(" ");
+                continue;
+            }
+            /** 2.没有连续的迟到late/早退leaveearly*/
+            boolean hasFalg = true;
+            for (int i = 0; i < inpAl.size() - 1; i++){
+                String strA = ls.get(i);
+                String strB = ls.get(i+1);
+                if (("late".equals(strA) && "leaveearly".equals(strB)) || ("late".equals(strB) && "leaveearly".equals(strA)){
+                    hasFalg = false;
+                    break;
+                }
+            }
+            if (!hasFalg){
+                sb.append(hasFalg).append(" ");
+                continue;
+            }
+
+            /** 3.任意连续7次考勤 缺勤/迟到/早退 不超过3次*/
+            int qczCount = 0;
+            int lianCount = 0;
+            for (int i = 0; i < inpAl.size(); i++){
+                if (!"present".equals(inpAl.get(i))){
+                    qczCount++;
+                }
+                lianCount += 1;
+            }
+            if ((lianCount <= 7) && (qczCount >= 3)){
+                sb.append("false").append(" ");
+            }else{
+                hasFalg = true;
+                for(int i = 0; i < lianCount -1);
+            }
+        }
+
+
+
+    }
 }
