@@ -39,7 +39,9 @@ public class Star70 {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
 
+        // N位
         int N = Integer.parseInt(in.nextLine());
+        // 第M个水仙花数
         int M = Integer.parseInt(in.nextLine());
         in.close();
 
@@ -50,17 +52,37 @@ public class Star70 {
 
         LinkedList<Integer> res = new LinkedList<>();
 
+        // n位数范围是 [100 , 1000)
         int start = (int) Math.pow(10, N - 1);
         int end = (int) Math.pow(10, N);
 
         for (int i = start; i < end; i++) {
             int sum = 0;
             int bit = start;
-            while (bit != 1) {
-                sum += Math.pow(i / bit % 10, N);
-                bit /= 10;
+
+
+
+            // 每位单处理求和
+//            while (bit != 1) {
+//                sum += Math.pow(i / bit % 10, N);
+//                bit /= 10;
+//            }
+//            sum += Math.pow(i % 10, N);
+
+
+            int x = 0;
+            while(x < N){
+                x++;
+                int a = start / ((int)Math.pow(10,x)) % 10;
+                sum += Math.pow(a,N);
+
             }
-            sum += Math.pow(i % 10, N);
+            System.out.println(sum);
+
+
+
+
+
             if (sum == i) {
                 res.add(i);
             }
